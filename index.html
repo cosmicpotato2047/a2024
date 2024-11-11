@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>어디 갈래?</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw&callback=initMap" async defer></script>
+
+</head>
+<body>
+  <!-- 초기 화면 -->
+  <div id="initialScreen" class="screen">
+    <header>
+      <h1>어디 갈래?</h1>
+    </header>
+    <div class="center-buttons">
+      <button onclick="useCurrentLocation()">현재 위치 사용</button>
+      <button onclick="openMapModal()">직접 위치 설정</button>
+    </div>
+  </div>
+
+  <!-- 구글 지도 모달 윈도우 -->
+<div id="mapModal" class="modal">
+  <div class="modal-content" style="width: 90%; height: 80%;">
+    <span class="close" onclick="closeModal('mapModal')">&times;</span>
+    <h3>위치를 선택하세요</h3>
+    <div id="googleMap" style="width: 100%; height: 80%;"></div>
+    <button onclick="confirmLocation()">확인</button>
+  </div>
+</div>
+
+  <!-- 위치 설정 후 정보 화면 -->
+  <div id="infoScreen" class="screen" style="display: none;">
+    <div class="column" id="locationColumn">
+      <div id="mapContainer"></div>
+      <div id="weatherInfo"></div>
+      <div id="clothingAdvice"></div>
+    </div>
+    <div class="column" id="landmarksColumn">
+      <h2>랜드마크</h2>
+      <ul id="landmarksList"></ul>
+    </div>
+    <div class="column" id="youtubeColumn">
+      <h2>유튜브 여행 영상</h2>
+      <div id="youtubeVideos"></div>
+    </div>
+    <div class="column" id="cultureColumn">
+      <h2>문화 & 언어 정보</h2>
+      <button onclick="openModal('cultureModal')">문화 정보</button>
+      <button onclick="openModal('languageModal')">언어 정보</button>
+      <a href="https://www.0404.go.kr" target="_blank">외교부 정보</a>
+    </div>
+  </div>
+
+  <!-- 모달 윈도우: 문화 정보 -->
+  <div id="cultureModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('cultureModal')">&times;</span>
+      <h3>문화 정보</h3>
+      <p>해당 위치의 문화 정보를 표시합니다.</p>
+    </div>
+  </div>
+
+  <!-- 모달 윈도우: 언어 정보 -->
+  <div id="languageModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('languageModal')">&times;</span>
+      <h3>언어 정보</h3>
+      <p>해당 위치에서 사용되는 기본 인사말, 표현 등을 표시합니다.</p>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
