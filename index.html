@@ -6,7 +6,6 @@
   <title>어디 갈래?</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw&callback=initMap" async defer></script>
-
 </head>
 <body>
   <!-- 초기 화면 -->
@@ -16,19 +15,17 @@
     </header>
     <div class="center-buttons">
       <button onclick="useCurrentLocation()">현재 위치 사용</button>
-      <button onclick="openMapModal()">직접 위치 설정</button>
+      <button onclick="openDirectLocationModal()">직접 위치 설정</button>
     </div>
   </div>
 
   <!-- 구글 지도 모달 윈도우 -->
-<div id="mapModal" class="modal">
-  <div class="modal-content" style="width: 90%; height: 80%;">
-    <span class="close" onclick="closeModal('mapModal')">&times;</span>
-    <h3>위치를 선택하세요</h3>
-    <div id="googleMap" style="width: 100%; height: 80%;"></div>
-    <button onclick="confirmLocation()">확인</button>
+  <div id="mapModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('mapModal')">&times;</span>
+      <div id="modalContent"></div>
+    </div>
   </div>
-</div>
 
   <!-- 위치 설정 후 정보 화면 -->
   <div id="infoScreen" class="screen" style="display: none;">
