@@ -1,3 +1,16 @@
+// 화면 로드 시 LittleP와 GLOBE의 크기를 조정
+document.addEventListener("DOMContentLoaded", () => {
+  const littleP = document.getElementById("littlep");
+  const globe = document.getElementById("globe");
+
+  // 화면 크기가 작으면 크기를 조정
+  if (window.innerWidth < 500) {
+    globe.style.width = "200px";
+    littleP.style.width = "8%";
+  }
+});
+
+
 // 모달 열기
 function openModal(modalId) {
   document.getElementById(modalId).style.display = 'flex';
