@@ -37,28 +37,32 @@
     </div>
   </div>
 
-  <!-- 위치 설정 후 정보 화면 -->
-  <div id="infoScreen" class="screen" style="display: none;">
-    <div class="column" id="locationColumn">
-      <div id="mapContainer"></div>
-      <div id="weatherInfo"></div>
-      <div id="clothingAdvice"></div>
-    </div>
-    <div class="column" id="landmarksColumn">
-      <h2>랜드마크</h2>
-      <ul id="landmarksList"></ul>
-    </div>
-    <div class="column" id="youtubeColumn">
-      <h2>유튜브 여행 영상</h2>
-      <div id="youtubeVideos"></div>
-    </div>
-    <div class="column" id="cultureColumn">
+<!-- 위치 설정 후 정보 화면 -->
+<div id="infoScreen" class="screen" style="display: none;">
+  <div id="leftColumn" class="column">
+    <div id="mapContainer"></div>
+    <div id="weatherInfo"></div>
+    <div id="clothingAdvice"></div>
+    <div id="cultureColumn">
       <h2>문화 & 언어 정보</h2>
       <button onclick="openModal('cultureModal')">문화 정보</button>
       <button onclick="openModal('languageModal')">언어 정보</button>
       <a href="https://www.0404.go.kr" target="_blank">외교부 정보</a>
     </div>
   </div>
+  
+  <div id="centerColumn" class="column">
+    <h2>랜드마크</h2>
+    <ul id="landmarksList"></ul>
+  </div>
+  
+  <div id="rightColumn" class="column">
+    <h2>유튜브 여행 영상</h2>
+    <div id="youtubeVideos"></div>
+  </div>
+</div>
+
+
 
   <!-- 모달 윈도우: 문화 정보 -->
   <div id="cultureModal" class="modal">
