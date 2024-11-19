@@ -51,13 +51,38 @@ header h1 {
 
 /* 정보 화면 레이아웃 */
 #infoScreen {
-  display: flex;
+  display: flex; /* 가로 정렬 */
+  flex-direction: row; /* 좌중우 정렬 */
+  height: 100vh; /* 화면 높이를 100% 사용 */
 }
 
 .column {
   flex: 1;
   padding: 20px;
   border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column; /* 각 열 안에서의 컨텐츠는 세로 정렬 */
+  justify-content: flex-start;
+}
+
+/* 좌측 컬럼 스타일 (날씨 및 문화) */
+#leftColumn {
+  border-right: 1px solid #ddd; /* 중간 컬럼과 구분선 */
+}
+
+/* 중앙 컬럼 스타일 (랜드마크) */
+#centerColumn {
+  border-right: 1px solid #ddd; /* 오른쪽 컬럼과 구분선 */
+}
+
+/* 오른쪽 컬럼 스타일 (유튜브) */
+#rightColumn {
+  border-right: none; /* 마지막 열은 구분선 없음 */
+}
+
+/* 문화 & 언어 정보 스타일 */
+#cultureColumn {
+  margin-top: 20px; /* 날씨 정보 아래로 여백 */
 }
 
 .column:last-child {
