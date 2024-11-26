@@ -82,7 +82,7 @@ function initMap(lat, lng) {
 
 function initSelectableMap() {
   const map = new google.maps.Map(document.getElementById("googleMap"), {
-    center: { lat: 37.5665, lng: 126.9780 }, // Seoul default
+    center: { lat: 37.7749, lng: -122.4194 }, // San Francisco default
     zoom: 12,
   });
 
@@ -101,7 +101,6 @@ function loadInfoScreen(latitude, longitude) {
   // 지도와 정보 로드
   loadMap(latitude, longitude);
   loadWeather(latitude, longitude);
-  loadLandmarks(latitude, longitude);
   loadYouTubeVideos(latitude, longitude);
 }
 
