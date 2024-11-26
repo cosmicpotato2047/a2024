@@ -38,49 +38,55 @@
   </div>
 
 <!-- 위치 설정 후 정보 화면 -->
-<div id="infoScreen" class="screen" style="display: none;">
-  <div id="leftColumn" class="column">
-    <div id="mapContainer"></div>
-    <div id="weatherInfo"></div>
-    <div id="clothingAdvice"></div>
-    <div id="cultureColumn">
-      <h2>문화 & 언어 정보</h2>
-      <button onclick="openModal('cultureModal')">문화 정보</button>
-      <button onclick="openModal('languageModal')">언어 정보</button>
-      <a href="https://www.0404.go.kr" target="_blank">외교부 정보</a>
-    </div>
+ 
+<div id="infoScreen" class="screen" style="display: none; flex-direction: column;">
+
+  <!-- 위쪽 정보 섹션 -->
+  <div style="text-align: center; margin: 20px 0;">
+    <p>현재 위치: <span id="mapContainer">정보 없음</span></p>
+    <p>날씨: <span id="weatherInfo">정보 없음</span></p>
+    <p>옷차림 추천: <span id="clothingAdvice">정보 없음</span></p>
   </div>
   
-  <div id="centerColumn" class="column">
-    <h2>랜드마크</h2>
-    <ul id="landmarksList"></ul>
-  </div>
-  
-  <div id="rightColumn" class="column">
-    <h2>유튜브 여행 영상</h2>
-    <div id="youtubeVideos"></div>
+  <!-- 버튼 섹션 -->
+  <div style="display: flex; justify-content: space-evenly; gap: 3cm; margin: 20px;">
+    <button id="cultureButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('cultureModal')">문화&언어 정보</button>
+    <button id="googlePlaceButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('placeModal')">장소 검색<br>by Google Place</button>
+    <button id="youtubeButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('youtubeModal')">영상 검색<br>by Youtube</button>
   </div>
 </div>
 
 
+<!--문화 언어 모달-->
+<div id="cultureModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('cultureModal')">&times;</span>
+    <button onclick="openModal('cultureModal')">문화 정보</button>
+    <button onclick="openModal('languageModal')">언어 정보</button>
+    <a href="https://www.0404.go.kr" target="_blank">외교부 정보</a>
+  </div>  
+</div>
 
-  <!-- 모달 윈도우: 문화 정보 -->
-  <div id="cultureModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('cultureModal')">&times;</span>
-      <h3>문화 정보</h3>
-      <p>해당 위치의 문화 정보를 표시합니다.</p>
-    </div>
+<!-- 장소 검색 모달 -->
+<div id="placeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('placeModal')">&times;</span>
+    <h3>장소 검색 by Google Place</h3>
+    <p>Google Places API를 이용하여 장소 정보를 검색합니다.</p>
+    <ul id="landmarksList"></ul>
   </div>
+</div>
 
-  <!-- 모달 윈도우: 언어 정보 -->
-  <div id="languageModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('languageModal')">&times;</span>
-      <h3>언어 정보</h3>
-      <p>해당 위치에서 사용되는 기본 인사말, 표현 등을 표시합니다.</p>
-    </div>
+<!-- 영상 검색 모달 -->
+<div id="youtubeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('youtubeModal')">&times;</span>
+    <h3>영상 검색 by Youtube</h3>
+    <p>YouTube API를 이용하여 관련 영상을 검색합니다.</p>
+    <div id="youtubeVideos"></div>
   </div>
+</div>
+
 
   <script src="scripts.js"></script>
 </body>
