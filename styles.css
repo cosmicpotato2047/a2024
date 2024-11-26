@@ -51,38 +51,42 @@ header h1 {
 
 /* 정보 화면 레이아웃 */
 #infoScreen {
-  display: flex; /* 가로 정렬 */
-  flex-direction: row; /* 좌중우 정렬 */
-  height: 100vh; /* 화면 높이를 100% 사용 */
-}
-
-.column {
-  flex: 1;
-  padding: 20px;
-  border-right: 1px solid #ddd;
   display: flex;
-  flex-direction: column; /* 각 열 안에서의 컨텐츠는 세로 정렬 */
-  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url('background2.png'); /* 배경 이미지 추가 */
+  background-size: cover; /* 화면 전체를 덮도록 설정 */
+  background-position: center; /* 이미지가 화면 중앙에 위치하도록 설정 */
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
 }
 
-/* 좌측 컬럼 스타일 (날씨 및 문화) */
-#leftColumn {
-  border-right: 1px solid #ddd; /* 중간 컬럼과 구분선 */
+/* 기본 버튼 스타일 */
+button {
+  border: 2px solid #ddd;
+  background-color: #f9f9f9;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
-/* 중앙 컬럼 스타일 (랜드마크) */
-#centerColumn {
-  border-right: 1px solid #ddd; /* 오른쪽 컬럼과 구분선 */
+button:hover {
+  transform: scale(1.05);
 }
 
-/* 오른쪽 컬럼 스타일 (유튜브) */
-#rightColumn {
-  border-right: none; /* 마지막 열은 구분선 없음 */
+/* Yes/No 버튼 스타일 */
+.modal-content button {
+  font-size: 1rem; /* 크기를 1rem으로 고정 */
+  margin: 10px;
+  padding: 10px 15px;
 }
 
-/* 문화 & 언어 정보 스타일 */
-#cultureColumn {
-  margin-top: 20px; /* 날씨 정보 아래로 여백 */
+/* InfoScreen 버튼 스타일 */
+#infoScreen button {
+  font-size: 1.5rem; /* 크기를 1.5rem으로 고정 */
+  width: 7.5cm;
+  height: 7.5cm;
 }
 
 .column:last-child {
@@ -122,13 +126,19 @@ h2 {
   top: 10px;
   right: 15px;
   cursor: pointer;
+  font-size: 2rem; /* 글꼴 크기를 키워 버튼 확대 */
+  padding: 10px;   /* 버튼 클릭 영역을 넓힘 */
+  background-color: #f9f9f9;
+  border: 2px solid #ddd;
+  border-radius: 50%; /* 동그란 버튼 */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button {
-  margin: 10px;
-  padding: 10px 15px;
-  font-size: 1rem;
-}
+
 
 /* 어린왕자와 지구본을 포함하는 컨테이너 */
 #center-container {
