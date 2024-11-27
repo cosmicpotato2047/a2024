@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw&libraries=places&callback=initMap" async defer ></script>
 </head>
 <body>
   <!-- 초기 화면 -->
@@ -73,11 +73,12 @@
     <span class="close" onclick="closeModal('placeModal')">&times;</span>
     <h3>장소 검색 by Google Place</h3>
     <p>Google Places API를 이용하여 장소 정보를 검색합니다.</p>
+    
 
     <!-- 카테고리 선택 -->
     <label for="mainCategory">중위 카테고리:</label>
     <select id="mainCategory" onchange="populateSubCategories()">
-      <option value="none"> </option>
+      <option value="" disabled selected>--골라주세요!--</option>
       <option value="lodging">숙박 및 관광</option>
       <option value="food">음식점</option>
       <option value="shopping">쇼핑 및 상업</option>
@@ -97,6 +98,13 @@
       <!-- JavaScript로 동적으로 생성 -->
     </select>
 
+    <!-- 정렬 기준 선택 -->
+    <label for="sortBy">정렬 기준:</label>
+    <select id="sortBy">
+      <option value="prominence">인기도</option>
+      <option value="distance">가까운 거리순</option>
+    </select>
+
     <!-- 반경 선택 -->
     <label for="radius">반경:</label>
     <select id="radius">
@@ -105,45 +113,43 @@
       <option value="15000">15km</option>
     </select>
 
-    <!-- 정렬 기준 선택 -->
-    <label for="sortBy">정렬 기준:</label>
-    <select id="sortBy">
-      <option value="prominence">인기도</option>
-      <option value="distance">가까운 거리순</option>
-    </select>
-
     <button onclick="searchPlaces()">검색</button>
+
+    <p>도시 중심 근처: 3km (이동이 쉬운 도심 지역에 적합)<br>
+      도시 외곽 및 교외 지역: 7km (더 넓은 지역 탐색에 적합)<br>
+      자연 명소 탐색: 15km (드라이브 또는 자연 탐험을 고려한 반경)</p>
+      
   </div>
 </div>
 
 <!-- 결과 화면 -->
 <div id="placeSearchResultScreen" class="screen" style="display: none;">
-  <header>
-    <h1>검색 결과</h1>
-  </header>
+  <div style="display: flex; flex-direction: row; height: 100%;">
 
-  <!-- 조건 및 결과 -->
-  <div>
-    <h2>선택한 조건</h2>
-    <p id="selectedConditions">조건 정보 없음</p>
+    <!-- 왼쪽: 장소 목록과 검색 조건 -->
+    <div class="left" style="width: 10cm; padding: 20px; border-right: 1px solid #ccc; display: flex; flex-direction: column;">
+      <div id="selectedConditions" style="margin-bottom: 20px;">
+        <!-- 검색 조건이 여기에 표시됩니다 -->
+        <h3>선택한 조건</h3>
+        <p>조건이 여기에 표시됩니다</p>
+      </div>
+      <div class="place-list" style="flex: 1; overflow-y: auto;">
+        <h2>검색된 장소</h2>
+        <!-- 장소 목록이 여기에 표시됩니다 -->
+      </div>
+    </div>
+
+    <!-- 오른쪽: 지도 -->
+    <div class="right" style="flex: 1; position: relative;">
+      <div id="resultMap" style="width: 100%; height: 100%;"></div>
+    </div>
   </div>
-
-  <!-- 보기 선택 -->
-  <div id="viewButtons" style="margin: 20px;">
-    <button onclick="showMapView()">지도로 보기</button>
-    <button onclick="showTableView()">표로 보기</button>
-  </div>
-
-  <!-- 결과 컨테이너 -->
-  <div id="resultContainer">
-    <!-- 선택된 보기 형식에 따라 내용 추가 -->
-  </div>
-
-  <!-- 돌아가기 버튼 -->
-  <div>
+  <div style="margin-top: 20px; text-align: center;">
     <button onclick="goBackToSearch()">검색 화면으로 돌아가기</button>
   </div>
 </div>
+
+
 
 
 <!-- 영상 검색 모달 -->
