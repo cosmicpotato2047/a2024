@@ -115,12 +115,135 @@ function loadWeather(latitude, longitude) {
   document.getElementById('clothingAdvice').innerText = "추천 복장: 가벼운 옷차림";
 }
 
-function loadLandmarks(latitude, longitude) {
-  const landmarksList = document.getElementById('landmarksList');
-  landmarksList.innerHTML = "<li>랜드마크 1</li><li>랜드마크 2</li>";
-}
-
 function loadYouTubeVideos(latitude, longitude) {
   const youtubeVideos = document.getElementById('youtubeVideos');
   youtubeVideos.innerHTML = "<p>추천 영상 로드 중...</p>";
+}
+
+const subCategories = {
+  lodging: ['lodging', 'tourist_attraction', 'campground', 'rv_park'], // 숙박 및 관광
+  food: ['restaurant', 'cafe', 'bakery', 'meal_delivery', 'meal_takeaway', 'food'], // 음식점
+  shopping: [
+    'shopping_mall', 'store', 'book_store', 'clothing_store', 
+    'electronics_store', 'furniture_store', 'jewelry_store', 
+    'department_store', 'convenience_store', 'grocery_or_supermarket'
+  ], // 쇼핑 및 상업
+  outdoor: ['park', 'zoo', 'aquarium', 'amusement_park', 'natural_feature'], // 야외 활동 및 자연
+  culture: ['art_gallery', 'museum', 'library', 'movie_theater', 'stadium'], // 문화 및 예술
+  transport: [
+    'airport', 'bus_station', 'subway_station', 'train_station', 
+    'taxi_stand', 'transit_station', 'car_rental', 'parking', 'gas_station'
+  ], // 교통 및 여행
+  alcohol: ['liquor_store', 'bar', 'night_club'], // 주류
+  convenience: [
+    'beauty_salon', 'hair_care', 'spa', 'laundry', 'car_repair', 
+    'hardware_store', 'home_goods_store'
+  ], // 기타 편의 시설
+  health: ['hospital', 'pharmacy', 'doctor', 'dentist', 'veterinary_care', 'gym'], // 건강 및 의료
+  public: [
+    'school', 'university', 'post_office', 'city_hall', 
+    'embassy', 'fire_station', 'police', 'local_government_office'
+  ], // 공공 서비스 및 기관
+  finance: ['atm', 'bank', 'accounting', 'insurance_agency', 'real_estate_agency'], // 금융 및 비즈니스
+  religion: [
+    'church', 'hindu_temple', 'mosque', 'synagogue', 'cemetery', 'place_of_worship'
+  ] // 종교 및 기념
+};
+
+function populateSubCategories() {
+  const mainCategory = document.getElementById('mainCategory').value;
+  const subCategorySelect = document.getElementById('subCategory');
+  subCategorySelect.innerHTML = ''; // 기존 옵션 제거
+
+  subCategories[mainCategory].forEach(category => {
+    const option = document.createElement('option');
+    option.value = category;
+    option.textContent = category;
+    subCategorySelect.appendChild(option);
+  });
+}
+
+function searchPlaces() {
+  // 선택된 조건 가져오기
+  const mainCategory = document.getElementById('mainCategory').value;
+  const subCategory = document.getElementById('subCategory').value;
+  const radius = document.getElementById('radius').value;
+  const sortBy = document.getElementById('sortBy').value;
+
+  // 조건 표시
+  document.getElementById('selectedConditions').innerHTML = `
+    중위 카테고리: ${mainCategory}<br>
+    하위 카테고리: ${subCategory}<br>
+    반경: ${radius}m<br>
+    정렬 기준: ${sortBy}
+  `;
+
+  // 결과 화면으로 전환
+  document.getElementById('placeModal').style.display = 'none';
+  document.getElementById('infoScreen').style.display = 'none';
+  document.getElementById('placeSearchResultScreen').style.display = 'flex';
+
+  // 검색 로직 추가 (Google Places API 호출 등)
+  loadSearchResults(subCategory, radius, sortBy);
+}
+
+function showMapView() {
+  const resultContainer = document.getElementById('resultContainer');
+  resultContainer.innerHTML = `<div id="mapView" style="width: 100%; height: 400px;"></div>`;
+
+  const map = new google.maps.Map(document.getElementById('mapView'), {
+    center: { lat: 37.7749, lng: -122.4194 }, // 임의의 중심 좌표
+    zoom: 12,
+  });
+
+  // 예제 장소 데이터
+  const places = [
+    { name: "Place 1", lat: 37.7749, lng: -122.4194 },
+    { name: "Place 2", lat: 37.7849, lng: -122.4294 },
+  ];
+
+  places.forEach(place => {
+    new google.maps.Marker({
+      position: { lat: place.lat, lng: place.lng },
+      map,
+      title: place.name,
+    });
+  });
+}
+
+
+function showTableView() {
+  const resultContainer = document.getElementById('resultContainer');
+  const places = [
+    { name: "Place 1", address: "123 Street", rating: 4.5 },
+    { name: "Place 2", address: "456 Avenue", rating: 4.0 },
+  ];
+
+  let tableHTML = `
+    <table border="1" style="width: 100%; text-align: left;">
+      <tr>
+        <th>이름</th>
+        <th>주소</th>
+        <th>평점</th>
+      </tr>
+  `;
+
+  places.forEach(place => {
+    tableHTML += `
+      <tr>
+        <td>${place.name}</td>
+        <td>${place.address}</td>
+        <td>${place.rating}</td>
+      </tr>
+    `;
+  });
+
+  tableHTML += `</table>`;
+  resultContainer.innerHTML = tableHTML;
+}
+
+
+function goBackToSearch() {
+  document.getElementById('placeSearchResultScreen').style.display = 'none';
+  document.getElementById('infoScreen').style.display = 'flex';
 }
