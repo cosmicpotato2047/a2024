@@ -73,9 +73,78 @@
     <span class="close" onclick="closeModal('placeModal')">&times;</span>
     <h3>장소 검색 by Google Place</h3>
     <p>Google Places API를 이용하여 장소 정보를 검색합니다.</p>
-    <ul id="landmarksList"></ul>
+
+    <!-- 카테고리 선택 -->
+    <label for="mainCategory">중위 카테고리:</label>
+    <select id="mainCategory" onchange="populateSubCategories()">
+      <option value="none"> </option>
+      <option value="lodging">숙박 및 관광</option>
+      <option value="food">음식점</option>
+      <option value="shopping">쇼핑 및 상업</option>
+      <option value="outdoor">야외 활동 및 자연</option>
+      <option value="culture">문화 및 예술</option>
+      <option value="transport">교통 및 여행</option>
+      <option value="alcohol">주류</option>
+      <option value="convenience">기타 편의 시설</option>
+      <option value="health">건강 및 의료</option>
+      <option value="public">공공 서비스 및 기관</option>
+      <option value="finance">금융 및 비즈니스</option>
+      <option value="religion">종교 및 기념</option>
+    </select>
+
+    <label for="subCategory">하위 카테고리:</label>
+    <select id="subCategory">
+      <!-- JavaScript로 동적으로 생성 -->
+    </select>
+
+    <!-- 반경 선택 -->
+    <label for="radius">반경:</label>
+    <select id="radius">
+      <option value="3000">3km</option>
+      <option value="7000">7km</option>
+      <option value="15000">15km</option>
+    </select>
+
+    <!-- 정렬 기준 선택 -->
+    <label for="sortBy">정렬 기준:</label>
+    <select id="sortBy">
+      <option value="prominence">인기도</option>
+      <option value="distance">가까운 거리순</option>
+    </select>
+
+    <button onclick="searchPlaces()">검색</button>
   </div>
 </div>
+
+<!-- 결과 화면 -->
+<div id="placeSearchResultScreen" class="screen" style="display: none;">
+  <header>
+    <h1>검색 결과</h1>
+  </header>
+
+  <!-- 조건 및 결과 -->
+  <div>
+    <h2>선택한 조건</h2>
+    <p id="selectedConditions">조건 정보 없음</p>
+  </div>
+
+  <!-- 보기 선택 -->
+  <div id="viewButtons" style="margin: 20px;">
+    <button onclick="showMapView()">지도로 보기</button>
+    <button onclick="showTableView()">표로 보기</button>
+  </div>
+
+  <!-- 결과 컨테이너 -->
+  <div id="resultContainer">
+    <!-- 선택된 보기 형식에 따라 내용 추가 -->
+  </div>
+
+  <!-- 돌아가기 버튼 -->
+  <div>
+    <button onclick="goBackToSearch()">검색 화면으로 돌아가기</button>
+  </div>
+</div>
+
 
 <!-- 영상 검색 모달 -->
 <div id="youtubeModal" class="modal">
