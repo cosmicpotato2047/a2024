@@ -94,7 +94,10 @@ function initSelectableMap() {
 }
 
 // 정보 화면 로드
+let currentLocation = {};
 function loadInfoScreen(latitude, longitude) {
+  currentLocation = { lat: latitude, lng: longitude };
+
   document.getElementById("initialScreen").style.display = "none";
   document.getElementById("infoScreen").style.display = "flex";
 
@@ -164,83 +167,117 @@ function populateSubCategories() {
 }
 
 function searchPlaces() {
-  // 선택된 조건 가져오기
-  const mainCategory = document.getElementById('mainCategory').value;
-  const subCategory = document.getElementById('subCategory').value;
-  const radius = document.getElementById('radius').value;
-  const sortBy = document.getElementById('sortBy').value;
+  if (!currentLocation.lat || !currentLocation.lng) {
+    alert("위치를 먼저 설정하세요.");
+    return;
+  }
+  const mainCategory = document.getElementById("mainCategory").value;
+  const subCategory = document.getElementById("subCategory").value;
+  const radius = document.getElementById("radius").value;
+  const sortBy = document.getElementById("sortBy").value;
+
+  if (!mainCategory || !subCategory) {
+    alert("카테고리를 선택해주세요.");
+    return;
+  }
+
+  // 현재 위치 가져오기
+  const { lat, lng } = currentLocation;
+
+  const request = {
+    location: new google.maps.LatLng(lat, lng),
+    radius: sortBy === "prominence" ? parseInt(radius, 10) : undefined,
+    type: subCategory,
+    rankBy: sortBy === "distance" ? google.maps.places.RankBy.DISTANCE : undefined,
+  };
+
+  const service = new google.maps.places.PlacesService(document.createElement("div"));
+  service.nearbySearch(request, (results, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      updatePlaceSearchResultScreen(results, { mainCategory, subCategory, radius, sortBy });
+    } else {
+      alert("검색 결과가 없습니다. 조건을 변경해주세요.");
+    }
+  });
+}
+
+// 검색 결과 화면 업데이트
+
+
+
+function updatePlaceSearchResultScreen(results, conditions) {
+  // 화면 전환
+  document.getElementById("placeModal").style.display = "none";
+  document.getElementById("infoScreen").style.display = "none";
+  document.getElementById("placeSearchResultScreen").style.display = "flex";
 
   // 조건 표시
-  document.getElementById('selectedConditions').innerHTML = `
-    중위 카테고리: ${mainCategory}<br>
-    하위 카테고리: ${subCategory}<br>
-    반경: ${radius}m<br>
-    정렬 기준: ${sortBy}
+  const conditionsContainer = document.getElementById("selectedConditions");
+  conditionsContainer.innerHTML = `
+    <h3>선택한 조건</h3>
+    <p>중위 카테고리: ${conditions.mainCategory}</p>
+    <p>하위 카테고리: ${conditions.subCategory}</p>
+    <p>반경: ${conditions.radius || "거리 기반"}</p>
+    <p>정렬 기준: ${conditions.sortBy}</p>
   `;
 
-  // 결과 화면으로 전환
-  document.getElementById('placeModal').style.display = 'none';
-  document.getElementById('infoScreen').style.display = 'none';
-  document.getElementById('placeSearchResultScreen').style.display = 'flex';
+  // 장소 목록 표시
+  const resultsContainer = document.querySelector(".place-list");
+  resultsContainer.innerHTML = ""; // 기존 내용 초기화
 
-  // 검색 로직 추가 (Google Places API 호출 등)
-  loadSearchResults(subCategory, radius, sortBy);
-}
-
-function showMapView() {
-  const resultContainer = document.getElementById('resultContainer');
-  resultContainer.innerHTML = `<div id="mapView" style="width: 100%; height: 400px;"></div>`;
-
-  const map = new google.maps.Map(document.getElementById('mapView'), {
-    center: { lat: 37.7749, lng: -122.4194 }, // 임의의 중심 좌표
-    zoom: 12,
-  });
-
-  // 예제 장소 데이터
-  const places = [
-    { name: "Place 1", lat: 37.7749, lng: -122.4194 },
-    { name: "Place 2", lat: 37.7849, lng: -122.4294 },
-  ];
-
-  places.forEach(place => {
-    new google.maps.Marker({
-      position: { lat: place.lat, lng: place.lng },
-      map,
-      title: place.name,
-    });
-  });
-}
-
-
-function showTableView() {
-  const resultContainer = document.getElementById('resultContainer');
-  const places = [
-    { name: "Place 1", address: "123 Street", rating: 4.5 },
-    { name: "Place 2", address: "456 Avenue", rating: 4.0 },
-  ];
-
-  let tableHTML = `
-    <table border="1" style="width: 100%; text-align: left;">
-      <tr>
-        <th>이름</th>
-        <th>주소</th>
-        <th>평점</th>
-      </tr>
-  `;
-
-  places.forEach(place => {
-    tableHTML += `
-      <tr>
-        <td>${place.name}</td>
-        <td>${place.address}</td>
-        <td>${place.rating}</td>
-      </tr>
+  results.forEach((place, index) => {
+    const placeElement = document.createElement("div");
+    placeElement.className = "place-item";
+    placeElement.innerHTML = `
+      <h3>${place.name}</h3>
+      <p>주소: ${place.vicinity || "정보 없음"}</p>
+      <p>평점: ${place.rating || "정보 없음"} (${place.user_ratings_total || 0} 리뷰)</p>
     `;
+    placeElement.addEventListener("click", () => {
+      map.setCenter(place.geometry.location);
+      map.setZoom(15);
+    });
+    resultsContainer.appendChild(placeElement);
   });
 
-  tableHTML += `</table>`;
-  resultContainer.innerHTML = tableHTML;
+// 지도 표시
+  const mapContainer = document.getElementById("resultMap");
+  let parent = mapContainer.parentElement;
+while (parent) {
+  console.log("Parent element:", parent);
+  console.log("Parent offsetWidth:", parent.offsetWidth);
+  console.log("Parent offsetHeight:", parent.offsetHeight);
+  parent = parent.parentElement;
 }
+;
+  mapContainer.innerHTML = ""; // 기존 지도 초기화
+  
+  
+  if (currentLocation.lat && currentLocation.lng) {
+    const map = new google.maps.Map(mapContainer, {
+      center: currentLocation,
+      zoom: 13,
+    });
+
+    results.forEach((place, index) => {
+      const marker = new google.maps.Marker({
+        position: place.geometry.location,
+        map,
+        label: `${index + 1}`,
+      });
+
+      marker.addListener("click", () => {
+        map.setCenter(marker.getPosition());
+        map.setZoom(15);
+      });
+    });
+  } else {
+    console.error("currentLocation이 비어 있음:", currentLocation);
+    alert("현재 위치를 설정한 후 다시 시도하세요.");
+  }
+}
+
+
 
 
 function goBackToSearch() {
