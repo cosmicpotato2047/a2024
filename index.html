@@ -52,7 +52,8 @@
   <div style="display: flex; justify-content: space-evenly; gap: 3cm; margin: 20px;">
     <button id="cultureButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('cultureModal')">문화&언어 정보</button>
     <button id="googlePlaceButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('placeModal')">장소 검색<br>by Google Place</button>
-    <button id="youtubeButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('youtubeModal')">영상 검색<br>by Youtube</button>
+    <button id="youtubeButton" style="width: 7.5cm; height: 7.5cm;" onclick="searchLiveStreams()">Live 영상 검색<br>by Youtube</button>
+
   </div>
 </div>
 
@@ -156,8 +157,9 @@
 <div id="youtubeModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal('youtubeModal')">&times;</span>
-    <h3>영상 검색 by Youtube</h3>
-    <p>YouTube API를 이용하여 관련 영상을 검색합니다.</p>
+    <h3>Live 영상 검색 by Youtube</h3>
+    <p>YouTube API를 이용하여 해당 위치 근처에서 방송 중인 실시간 스트림 검색합니다.<br> 
+      (예: 축제, 스포츠 경기 등)</p>
     <div id="youtubeVideos"></div>
   </div>
 </div>
