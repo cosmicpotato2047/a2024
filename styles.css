@@ -286,3 +286,21 @@ h2 {
   max-height: 1000px; /* 모달 내 최대 높이 설정 */
   overflow-y: auto;  /* 세로 스크롤 추가 */
 }
+
+#liveButton, #completedButton {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#liveButton:hover, #completedButton:hover {
+  transform: scale(1.05);
+}
+
+#liveButton.active, #completedButton.active {
+  background-color: #ddd;
+  font-weight: bold;
+}
