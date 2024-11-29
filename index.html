@@ -42,12 +42,35 @@
 <div id="infoScreen" class="screen" style="display: none; flex-direction: column;">
 
   <!-- 위쪽 정보 섹션 -->
-  <div style="text-align: center; margin: 20px 0;">
-    <p>현재 위치: <span id="mapContainer">정보 없음</span></p>
-    <p>날씨: <span id="weatherInfo">정보 없음</span></p>
-    <p>옷차림 추천: <span id="clothingAdvice">정보 없음</span></p>
+  <div id="upperInfo" style="display: flex; flex-direction: row; align-items: center;">
+    <!-- 왼쪽: 날씨 정보 -->
+    <div id="weatherContainer" style="width: 40%; margin-right: 20px; padding: 20px; background: rgba(0, 0, 0, 0.5); color: white; border-radius: 10px; text-align: center;">
+      <h2>현재 위치: <span id="location">정보 없음</span></h2>
+      <p>현재 온도: <span id="temp">정보 없음</span>°C</p>
+      <p>체감 온도: <span id="feelsLike">정보 없음</span>°C</p>
+      <p>최저/최고 온도: <span id="tempRange">정보 없음</span>°C</p>
+      <p>날씨 상태: <span id="description">정보 없음</span></p>
+      <img id="weatherIcon" alt="날씨 아이콘" style="display: none;">
+      <p>습도: <span id="humidity">정보 없음</span>%</p>
+      <p>풍속: <span id="windSpeed">정보 없음</span> m/s</p>
+    </div>
+  
+    <!-- 가운데: 화살표 -->
+    <div id="arrowContainer" style="width: 10%; text-align: center; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+      <img src="arrow.png" alt="화살표" style="width: 900%; height: auto;">
+    </div>
+  
+    <!-- 오른쪽: 옷차림 추천 -->
+    <div id="clothingContainer" style="width: 60%; padding: 20px; background: rgba(0, 0, 0, 0.5); color: white; border-radius: 10px; text-align: center;">
+      <h2>추천 옷차림 <br> (날씨 정보 by OpenWeather)</h2>
+      
+      <p id="clothingAdvice">정보 없음</p>
+    </div>
   </div>
   
+  
+  
+
   <!-- 버튼 섹션 -->
   <div style="display: flex; justify-content: space-evenly; gap: 3cm; margin: 20px;">
     <button id="cultureButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('cultureModal')">문화&언어 정보</button>
