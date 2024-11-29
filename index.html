@@ -160,6 +160,10 @@
     <h3>Live 영상 검색 by Youtube</h3>
     <p>YouTube API를 이용하여 해당 위치 근처에서 방송 중인 실시간 스트림 검색합니다.<br> 
       (예: 축제, 스포츠 경기 등)</p>
+      <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;">
+        <button id="liveButton" class="active" onclick="switchStreamType('live')">실시간 스트림</button>
+        <button id="completedButton" onclick="switchStreamType('completed')">과거 실시간 스트림</button>
+      </div>      
     <div id="youtubeVideos"></div>
   </div>
 </div>
