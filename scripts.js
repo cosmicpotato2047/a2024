@@ -273,6 +273,19 @@ function goBackToSearch() {
   document.getElementById('infoScreen').style.display = 'flex';
 }
 
+
+
+
+
+let currentStreamType = 'live'; // 초기값은 실시간 스트림
+
+function switchStreamType(type) {
+  currentStreamType = type;
+  document.getElementById("liveButton").style.backgroundColor = type === 'live' ? '#ddd' : '#f9f9f9';
+  document.getElementById("completedButton").style.backgroundColor = type === 'completed' ? '#ddd' : '#f9f9f9';
+  searchLiveStreams(); // 선택된 스트림 유형으로 다시 검색
+}
+
 //youtube api
 function searchLiveStreams() {
   if (!currentLocation.lat || !currentLocation.lng) {
@@ -282,7 +295,7 @@ function searchLiveStreams() {
 
   const { lat, lng } = currentLocation; // infoScreen에서 설정된 currentLocation 사용
   const apiKey = "AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw"; // API 키를 여기서 불러옵니다.
-  const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&eventType=live&location=${lat},${lng}&locationRadius=50km&key=${apiKey}`;
+  const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&eventType=${currentStreamType}&location=${lat},${lng}&locationRadius=100km&key=${apiKey}`;
 
   fetch(searchUrl)
     .then(response => response.json())
@@ -300,14 +313,20 @@ function searchLiveStreams() {
 
             // 필터링: 허용된 카테고리에 해당하는 영상만 포함
             const filteredVideos = details.items.filter(video =>
-              allowedCategories.includes(parseInt(video.snippet.categoryId))
+              video.snippet.categoryId && allowedCategories.includes(parseInt(video.snippet.categoryId))
             );
 
-            // 정렬: 현재 시청자 수 기준으로 내림차순
+            // 정렬: 실시간은 시청자 수, 과거 스트림은 조회수 기준
             const sortedVideos = filteredVideos.sort((a, b) => {
-              const aViewers = parseInt(a.liveStreamingDetails?.concurrentViewers || 0, 10);
-              const bViewers = parseInt(b.liveStreamingDetails?.concurrentViewers || 0, 10);
-              return bViewers - aViewers;
+              if (currentStreamType === 'live') {
+                const aViewers = parseInt(a.liveStreamingDetails?.concurrentViewers || 0, 10);
+                const bViewers = parseInt(b.liveStreamingDetails?.concurrentViewers || 0, 10);
+                return bViewers - aViewers;
+              } else {
+                const aViews = parseInt(a.statistics?.viewCount || 0, 10);
+                const bViews = parseInt(b.statistics?.viewCount || 0, 10);
+                return bViews - aViews;
+              }
             });
 
             // 정렬된 결과를 UI에 표시
@@ -317,15 +336,26 @@ function searchLiveStreams() {
             
               // 제목을 40자마다 <br> 삽입
               const formattedTitle = video.snippet.title.replace(/(.{40})/g, "$1<br>");
-            
+              
+              // 위치 정보 확인 및 거리 계산
+              const videoLocation = {
+                lat: video.snippet.location?.latitude,
+                lng: video.snippet.location?.longitude,
+              };
+              
+              const distance = videoLocation
+                ? `${calculateDistance(currentLocation, videoLocation)} km`
+                : "위치 정보가 제공되지 않는 스트림입니다.";
+              
+              
               videoElement.innerHTML = `
                 <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                  <img src="${video.snippet.thumbnails.default.url}" alt="썸네일" style="width: 120px; height: auto; margin-right: 15px; border-radius: 8px;">
+                  <img src="${video.snippet.thumbnails.default.url}" alt="썸네일" style="width: 200px; height: auto; margin-right: 15px; border-radius: 8px;">
                   <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank" style="color: blue; text-decoration: underline; display: block; margin-bottom: 8px;">영상 보러가기</a>
                   <div style="flex-grow: 1;">
                     <h4>${formattedTitle} <br>[채널: ${video.snippet.channelTitle}]</h4>
-                    <p>현재 시청자 수: ${video.liveStreamingDetails?.concurrentViewers || "정보 없음"}</p>
-                    <p>현재 위치와의 거리: </p>
+                    <p>${currentStreamType === 'live' ? `현재 시청자 수: ${video.liveStreamingDetails?.concurrentViewers || "0"}` : `조회수: ${video.statistics?.viewCount || "0"}`}</p>
+                    <p>현재 위치와의 거리: ${distance}</p>
                   </div>
                 </div>
               `;
@@ -348,6 +378,28 @@ function searchLiveStreams() {
     });
 }
 
+function calculateDistance(location1, location2) {
+  if (!location1 || !location2 || !location1.lat || !location1.lng || !location2.lat || !location2.lng) {
+    return "정보 없음"; // 위치 정보가 없는 경우 처리
+  }
+
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+  const earthRadiusKm = 6371; // 지구 반지름 (단위: km)
+
+  const dLat = toRadians(location2.lat - location1.lat);
+  const dLng = toRadians(location2.lng - location1.lng);
+
+  const lat1 = toRadians(location1.lat);
+  const lat2 = toRadians(location2.lat);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLng / 2) * Math.sin(dLng / 2) * Math.cos(lat1) * Math.cos(lat2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return (earthRadiusKm * c).toFixed(2); // 소수점 둘째 자리까지 반올림
+}
 
 
       
