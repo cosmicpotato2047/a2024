@@ -73,7 +73,7 @@
 
   <!-- 버튼 섹션 -->
   <div style="display: flex; justify-content: space-evenly; gap: 3cm; margin: 20px;">
-    <button id="cultureButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('cultureModal')">문화&언어 정보</button>
+    <button id="cultureButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('cultureModal')">세부 정보 및 팁</button>
     <button id="googlePlaceButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('placeModal')">장소 검색<br>by Google Place</button>
     <button id="youtubeButton" style="width: 7.5cm; height: 7.5cm;" onclick="searchLiveStreams()">Live 영상 검색<br>by Youtube</button>
 
@@ -83,13 +83,44 @@
 
 <!--문화 언어 모달-->
 <div id="cultureModal" class="modal">
-  <div class="modal-content">
+  <div class="modal-content" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
     <span class="close" onclick="closeModal('cultureModal')">&times;</span>
-    <button onclick="openModal('cultureModal')">문화 정보</button>
-    <button onclick="openModal('languageModal')">언어 정보</button>
-    <a href="https://www.0404.go.kr" target="_blank">외교부 정보</a>
+    <button onclick="openCountryDetails()">국가 세부 정보</button>
+    <button onclick="openLanguageTips()">언어 팁</button>
+    <a href="https://www.0404.go.kr" target="_blank">대한민국 외교부 해외 안전여행</a>
   </div>  
 </div>
+
+<!-- 국가 세부 정보 모달 -->
+<div id="countryDetailsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('countryDetailsModal')">&times;</span>
+    <div id="countryDetailsContent"></div>
+  </div>
+</div>
+
+<!-- 언어 팁 모달 -->
+<div id="languageTipsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('languageTipsModal')">&times;</span>
+    <label for="languageSelect">언어 선택:</label>
+    <select id="languageSelect" onchange="updateLanguageTips()">
+      <option value="english">영어 (English)</option>
+      <option value="chinese">중국어 (Mandarin Chinese)</option>
+      <option value="hindi">힌디어 (Hindi)</option>
+      <option value="spanish">스페인어 (Spanish)</option>
+      <option value="french">프랑스어 (French)</option>
+      <option value="arabic">아랍어 (Arabic)</option>
+      <option value="bengali">벵골어 (Bengali)</option>
+      <option value="portuguese">포르투갈어 (Portuguese)</option>
+      <option value="russian">러시아어 (Russian)</option>
+      <option value="urdu">우르두어 (Urdu)</option>
+    </select>
+    <div id="languageTipsContent"></div>
+  </div>
+</div>
+
+
 
 <!-- 장소 검색 모달 -->
 <div id="placeModal" class="modal">
