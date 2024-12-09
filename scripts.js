@@ -1,5 +1,13 @@
-// 화면 로드 시 LittleP와 GLOBE의 크기를 조정
 document.addEventListener("DOMContentLoaded", () => {
+  // "시작하기" 버튼 클릭 이벤트
+  const startButton = document.getElementById("startButton");
+  startButton.addEventListener("click", () => {
+    // 설명 화면 숨기기
+    document.getElementById("introScreen").style.display = "none";
+    // 초기 화면 표시
+    document.getElementById("initialScreen").style.display = "flex";
+  });
+
   const littleP = document.getElementById("littlep");
   const globe = document.getElementById("globe");
 
@@ -9,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
     littleP.style.width = "8%";
   }
 });
+
+  
+
+
+
 
 
 // 모달 열기
@@ -209,7 +222,7 @@ function openCountryDetails() {
 
   const { lat, lng } = currentLocation;
   const username = "jackie_chan"; 
-  const nearbyUrl = `https://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=${username}`;
+  const nearbyUrl = `http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=${username}`;
 
   // 1. 가까운 장소를 가져오기
   fetch(nearbyUrl)
@@ -219,7 +232,7 @@ function openCountryDetails() {
         const countryCode = data.geonames[0].countryCode;
 
         // 2. 국가 세부 정보를 가져오기
-        const countryInfoUrl = `https://api.geonames.org/countryInfoJSON?country=${countryCode}&username=${username}`;
+        const countryInfoUrl = `http://api.geonames.org/countryInfoJSON?country=${countryCode}&username=${username}`;
 
         return fetch(countryInfoUrl)
           .then(response => response.json())
