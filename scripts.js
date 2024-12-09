@@ -222,7 +222,8 @@ function openCountryDetails() {
 
   const { lat, lng } = currentLocation;
   const username = "jackie_chan"; 
-  const nearbyUrl = `http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=${username}`;
+  const corsProxy = "https://cors-anywhere.herokuapp.com/";
+  const nearbyUrl = `${corsProxy}http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=${username}`;
 
   // 1. 가까운 장소를 가져오기
   fetch(nearbyUrl)
