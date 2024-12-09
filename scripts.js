@@ -150,7 +150,7 @@ function updateWeatherContainer(data) {
 
   // 날씨 아이콘 업데이트
   const weatherIcon = document.getElementById("weatherIcon");
-  weatherIcon.src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+  weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
   weatherIcon.style.display = "inline";
 }
 
@@ -209,7 +209,7 @@ function openCountryDetails() {
 
   const { lat, lng } = currentLocation;
   const username = "jackie_chan"; 
-  const nearbyUrl = `http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=${username}`;
+  const nearbyUrl = `https://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=${username}`;
 
   // 1. 가까운 장소를 가져오기
   fetch(nearbyUrl)
@@ -219,7 +219,7 @@ function openCountryDetails() {
         const countryCode = data.geonames[0].countryCode;
 
         // 2. 국가 세부 정보를 가져오기
-        const countryInfoUrl = `http://api.geonames.org/countryInfoJSON?country=${countryCode}&username=${username}`;
+        const countryInfoUrl = `https://api.geonames.org/countryInfoJSON?country=${countryCode}&username=${username}`;
 
         return fetch(countryInfoUrl)
           .then(response => response.json())
