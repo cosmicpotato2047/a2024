@@ -251,17 +251,23 @@ h2 {
   background-color: #f9f9f9;
 }
 
+#placeSearchResultScreen > div {
+  overflow-x: auto; /* 가로 스크롤 활성화 */
+}
+
 /* left와 right 레이아웃 설정 */
 .left {
-  width: 10cm; /* 고정 너비 설정 */
+  max-width: 330px; /* 고정 너비 설정 */
+  min-width: 200px; /* Ensure it never shrinks below this width */
+  flex-shrink: 0; /* Prevent shrinking when the window is resized */
   display: flex;
   flex-direction: column;
 }
 
 .right {
-  flex: 1; /* 나머지 공간 차지 */
-  min-width: 1000px;
-  position: relative;
+  
+  min-width: 600px;
+  
 }
 
 #resultMap {
@@ -280,6 +286,20 @@ h2 {
   border: 1px solid #ddd;
   padding: 15px;
   border-radius: 8px;
+}
+
+.go_back-button {
+  font-size: 1.5rem; /* 글자 크기를 두 배로 키움 */
+  padding: 20px 40px; /* 버튼 크기를 키우기 위한 패딩 조정 */
+  background-color: #ffffe0; /* 연한 노란색 배경 */
+  border: 1px solid #cccccc; /* 테두리 추가 */
+  border-radius: 5px; /* 둥근 모서리 */
+  cursor: pointer; /* 포인터 커서 */
+  transition: background-color 0.3s; /* 마우스 오버 시 부드러운 전환 효과 */
+}
+
+.go_back-button:hover {
+  background-color: #fffacd; /* 마우스 오버 시 약간 더 짙은 노란색 */
 }
 
 .live-video-item {
@@ -351,16 +371,4 @@ h2 {
 }
 
 
-  .go_back-button {
-    font-size: 1.5rem; /* 글자 크기를 두 배로 키움 */
-    padding: 20px 40px; /* 버튼 크기를 키우기 위한 패딩 조정 */
-    background-color: #ffffe0; /* 연한 노란색 배경 */
-    border: 1px solid #cccccc; /* 테두리 추가 */
-    border-radius: 5px; /* 둥근 모서리 */
-    cursor: pointer; /* 포인터 커서 */
-    transition: background-color 0.3s; /* 마우스 오버 시 부드러운 전환 효과 */
-  }
-
-  .go_back-button:hover {
-    background-color: #fffacd; /* 마우스 오버 시 약간 더 짙은 노란색 */
-  }
+  
