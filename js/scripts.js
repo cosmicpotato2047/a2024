@@ -121,6 +121,13 @@ function loadInfoScreen(latitude, longitude) {
 }
 
 
+function returnToLocationSetup() {
+  // 현재 모달을 닫고 초기 위치 설정 화면 표시
+  closeModal('placeModal');
+  document.getElementById('infoScreen').style.display = 'none';
+  document.getElementById('initialScreen').style.display = 'flex';
+}
+
 
 
 
