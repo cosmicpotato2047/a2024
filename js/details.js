@@ -1,3 +1,5 @@
+
+
 function openCountryDetails() {
   if (!currentLocation.lat || !currentLocation.lng) {
     alert("위치를 먼저 설정하세요.");
@@ -8,32 +10,23 @@ function openCountryDetails() {
   const googleApiKey = "AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw";
   const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${googleApiKey}`;
 
-  // 1. Google Geocoding API 호출
+  // Fetch country details
   fetch(geocodingUrl)
     .then(response => response.json())
     .then(data => {
       if (data.status === "OK" && data.results.length > 0) {
-        const countryComponent = data.results.find(result => 
-          result.types.includes("country")
-        );
-
+        const countryComponent = data.results.find(result => result.types.includes("country"));
         if (countryComponent) {
           const countryName = countryComponent.formatted_address;
-          const countryCode = countryComponent.address_components.find(comp => 
-            comp.types.includes("country")
-          )?.short_name;
+          const countryCode = countryComponent.address_components.find(comp => comp.types.includes("country"))?.short_name;
 
           if (countryCode) {
-            // 2. REST Countries API 호출
             const restCountriesUrl = `https://restcountries.com/v3.1/alpha/${countryCode}`;
-
             fetch(restCountriesUrl)
               .then(response => response.json())
               .then(countryData => {
                 if (countryData && countryData[0]) {
                   const country = countryData[0];
-
-                  // 국가 정보 표시
                   const content = `
                     <h3>${country.name.common} (${countryName})</h3>
                     <p>공식 이름: ${country.name.official}</p>
@@ -48,7 +41,7 @@ function openCountryDetails() {
                     <p><a href="https://en.wikipedia.org/wiki/${country.name.common}" target="_blank">Wikipedia에서 자세히 보기</a></p>
                   `;
                   document.getElementById("countryDetailsContent").innerHTML = content;
-                  openModal("countryDetailsModal");
+                  openModal("cultureModal");
                 } else {
                   alert("국가 정보를 가져올 수 없습니다.");
                 }
@@ -65,7 +58,11 @@ function openCountryDetails() {
       }
     })
     .catch(error => console.error("Geocoding API 요청 오류:", error));
-}
+
+    openModal('cultureModal');
+  }
+
+
   
   
   const languageTips = {
