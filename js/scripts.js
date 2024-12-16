@@ -71,7 +71,8 @@ function openDirectLocationModal() {
   openModal("mapModal");
   document.getElementById("modalContent").innerHTML = `
     <div id="googleMap" style="width: 100%; height: 300px;"></div>
-    <p>설정한 위치: <span id="selectedLocation">없음</span></p>
+    <p>경도, 위도: <span id="selectedLocation">없음</span></p>
+    <p>주소: <spain id="selectedAddress">없음</span></p>
     <button onclick="nextAfterLocationSelection()">Next</button>
   `;
   initSelectableMap();
