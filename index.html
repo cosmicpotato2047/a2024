@@ -87,7 +87,7 @@
 
   <!-- 버튼 섹션 -->
   <div style="display: flex; justify-content: space-evenly; gap: 3cm; margin: 20px;">
-    <button id="cultureButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('cultureModal')">세부 정보 및 팁</button>
+    <button id="cultureButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal(openCountryDetails())">세부 정보 및 팁</button>
     <button id="googlePlaceButton" style="width: 7.5cm; height: 7.5cm;" onclick="openModal('placeModal')">장소 검색<br>by Google Place</button>
     <button id="youtubeButton" style="width: 7.5cm; height: 7.5cm;" onclick="searchLiveStreams()">Live 영상 검색<br>by Youtube</button>
 
@@ -99,7 +99,9 @@
 <div id="cultureModal" class="modal">
   <div class="modal-content" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
     <span class="close" onclick="closeModal('cultureModal')">&times;</span>
-    <button onclick="openCountryDetails()">국가 세부 정보</button>
+    <div id="countryDetailsContent">
+      <!-- Country details will be dynamically inserted here -->
+    </div>
     <button onclick="openLanguageTips()">언어 팁</button>
     <a href="https://www.0404.go.kr" target="_blank">대한민국 외교부 해외 안전여행</a>
   </div>  
