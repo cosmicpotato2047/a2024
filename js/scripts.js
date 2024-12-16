@@ -155,6 +155,12 @@ function getAddressFromCoordinates(lat, lng, callback) {
 
 
 
+window.getAddressFromCoordinates = getAddressFromCoordinates;
+
+
+
+
+
 
 
 
