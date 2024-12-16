@@ -1,51 +1,71 @@
 function openCountryDetails() {
-    if (!currentLocation.lat || !currentLocation.lng) {
-      alert("위치를 먼저 설정하세요.");
-      return;
-    }
-  
-    const { lat, lng } = currentLocation;
-    const username = "jackie_chan"; 
-    const corsProxy = "https://cors-anywhere.herokuapp.com/";
-    const nearbyUrl = `${corsProxy}http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=${username}`;
-  
-    // 1. 가까운 장소를 가져오기
-    fetch(nearbyUrl)
-      .then(response => response.json())
-      .then(data => {
-        if (data.geonames && data.geonames.length > 0) {
-          const countryCode = data.geonames[0].countryCode;
-  
-          // 2. 국가 세부 정보를 가져오기
-          const countryInfoUrl = `http://api.geonames.org/countryInfoJSON?country=${countryCode}&username=${username}`;
-  
-          return fetch(countryInfoUrl)
-            .then(response => response.json())
-            .then(countryData => {
-              if (countryData.geonames && countryData.geonames.length > 0) {
-                const country = countryData.geonames[0];
-  
-                // 3. 국가 정보를 표시
-                const content = `
-                  <h3>${country.countryName} 정보</h3>
-                  <p>언어: ${country.languages}</p>
-                  <p>통화: ${country.currencyCode}</p>
-                  <p>국제 전화 코드: +${country.countryCode}</p>
-                  <p>인구: ${country.population}</p>
-                  <p><a href="https://en.wikipedia.org/wiki/${country.countryName}" target="_blank">Wikipedia에서 자세히 보기</a></p>
-                `;
-                document.getElementById("countryDetailsContent").innerHTML = content;
-                openModal("countryDetailsModal");
-              } else {
-                alert("국가 세부 정보를 가져올 수 없습니다.");
-              }
-            });
-        } else {
-          alert("근처 장소 정보를 찾을 수 없습니다.");
-        }
-      })
-      .catch(error => console.error("API 요청 오류:", error));
+  if (!currentLocation.lat || !currentLocation.lng) {
+    alert("위치를 먼저 설정하세요.");
+    return;
   }
+
+  const { lat, lng } = currentLocation;
+  const googleApiKey = "AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw";
+  const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${googleApiKey}`;
+
+  // 1. Google Geocoding API 호출
+  fetch(geocodingUrl)
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "OK" && data.results.length > 0) {
+        const countryComponent = data.results.find(result => 
+          result.types.includes("country")
+        );
+
+        if (countryComponent) {
+          const countryName = countryComponent.formatted_address;
+          const countryCode = countryComponent.address_components.find(comp => 
+            comp.types.includes("country")
+          )?.short_name;
+
+          if (countryCode) {
+            // 2. REST Countries API 호출
+            const restCountriesUrl = `https://restcountries.com/v3.1/alpha/${countryCode}`;
+
+            fetch(restCountriesUrl)
+              .then(response => response.json())
+              .then(countryData => {
+                if (countryData && countryData[0]) {
+                  const country = countryData[0];
+
+                  // 국가 정보 표시
+                  const content = `
+                    <h3>${country.name.common} (${countryName})</h3>
+                    <p>공식 이름: ${country.name.official}</p>
+                    <p>수도: ${country.capital ? country.capital[0] : "정보 없음"}</p>
+                    <p>인구: ${country.population.toLocaleString()}</p>
+                    <p>통화: ${Object.values(country.currencies || {})
+                      .map(curr => curr.name)
+                      .join(", ")}</p>
+                    <p>지역: ${country.region}</p>
+                    <p>국기:</p>
+                    <img src="${country.flags.svg}" alt="국기" style="width: 100px;"/>
+                    <p><a href="https://en.wikipedia.org/wiki/${country.name.common}" target="_blank">Wikipedia에서 자세히 보기</a></p>
+                  `;
+                  document.getElementById("countryDetailsContent").innerHTML = content;
+                  openModal("countryDetailsModal");
+                } else {
+                  alert("국가 정보를 가져올 수 없습니다.");
+                }
+              })
+              .catch(error => console.error("REST Countries API 요청 오류:", error));
+          } else {
+            alert("국가 코드를 찾을 수 없습니다.");
+          }
+        } else {
+          alert("국가 정보를 찾을 수 없습니다.");
+        }
+      } else {
+        alert("Geocoding API 요청 실패: " + data.status);
+      }
+    })
+    .catch(error => console.error("Geocoding API 요청 오류:", error));
+}
   
   
   const languageTips = {
