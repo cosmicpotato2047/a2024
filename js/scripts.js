@@ -106,9 +106,12 @@ function initSelectableMap() {
     const lat = e.latLng.lat();
     const lng = e.latLng.lng();
     getAddressFromCoordinates(lat, lng, address => {
-      document.getElementById("selectedLocation").innerText = address;
+      document.getElementById("selectedLocation").innerText = `${lat},${lng}`; // 위도, 경도 저장
+      document.getElementById("selectedAddress").innerText = address; // 주소도 보여줌
     });
   });
+
+  
 }
 
 
@@ -154,13 +157,7 @@ function getAddressFromCoordinates(lat, lng, callback) {
 
 
 
-
 window.getAddressFromCoordinates = getAddressFromCoordinates;
-
-
-
-
-
 
 
 
