@@ -11,7 +11,12 @@ function fetchWeatherData(latitude, longitude) {
     .then(data => {
       // 날씨 정보 업데이트
       updateWeatherContainer(data);
-
+      
+      // Geocoding을 통해 주소 가져오기
+      getAddressFromCoordinates(latitude, longitude, address => {
+        document.getElementById("location").innerText = address; // 주소 업데이트
+      });
+      
       // 옷차림 추천 업데이트
       const temp = data.main.temp;
       const feelsLike = data.main.feels_like;
