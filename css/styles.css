@@ -131,6 +131,7 @@ h2 {
 }
 
 .modal-content {
+  position : relative;
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -142,11 +143,12 @@ h2 {
 
 .close {
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: -20px; /* 기존 값을 변경 */
+  left: 50%; /* 가로 중앙 정렬 */
+  transform: translate(-50%, -100%); /* 정확한 정렬과 위치 조정을 위한 설정 */
   cursor: pointer;
-  font-size: 2rem; /* 글꼴 크기를 키워 버튼 확대 */
-  padding: 10px;   /* 버튼 클릭 영역을 넓힘 */
+  font-size: 2rem;
+  padding: 10px;
   background-color: #f9f9f9;
   border: 2px solid #ddd;
   border-radius: 50%; /* 동그란 버튼 */
@@ -156,6 +158,7 @@ h2 {
   align-items: center;
   justify-content: center;
 }
+
 
 
 
