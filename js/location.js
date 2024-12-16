@@ -113,6 +113,7 @@ function updatePlaceSearchResultScreen(results, conditions) {
       // 리스트 항목 클릭 이벤트
       placeElement.addEventListener("click", () => {
           setActivePlace(index, place.geometry.location);
+          getPlaceDetails(place.place_id); // Place Details 요청
       });
 
       resultsContainer.appendChild(placeElement);
@@ -126,6 +127,7 @@ function updatePlaceSearchResultScreen(results, conditions) {
 
       marker.addListener("click", () => {
           setActivePlace(index, place.geometry.location);
+          getPlaceDetails(place.place_id); // Place Details 요청
       });
 
       markers.push(marker);
@@ -161,17 +163,40 @@ function setActivePlace(index, location) {
   displayPlaceDetails(index);
 }
 
-function displayPlaceDetails(index) {
-  const placeDetails = document.querySelectorAll(".place-item")[index].innerHTML;
+function getPlaceDetails(placeId) {
+  const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+  // Place Details 요청
+  service.getDetails({ placeId }, (place, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+          // 세부 정보를 모달에 삽입
+          displayPlaceDetails(place);
+      } else {
+          console.error("Place Details 요청 실패:", status);
+          alert("세부 정보를 가져올 수 없습니다.");
+      }
+  });
+}
+
+function displayPlaceDetails(place) {
   const detailModal = document.getElementById("detailModal");
 
-  // 상세 정보를 모달에 삽입
+  // 세부 정보 HTML 생성
   detailModal.innerHTML = `
-      ${placeDetails}
+      <h2>${place.name}</h2>
+      <p>주소: ${place.formatted_address || "정보 없음"}</p>
+      <p>전화번호: ${place.formatted_phone_number || "정보 없음"}</p>
+      <p>평점: ${place.rating || "정보 없음"} (${place.user_ratings_total || 0} 리뷰)</p>
+      <p>운영 시간:</p>
+      <ul>
+          ${(place.opening_hours?.weekday_text || []).map(day => `<li>${day}</li>`).join("")}
+      </ul>
+      <p>웹사이트: <a href="${place.website}" target="_blank">${place.website || "정보 없음"}</a></p>
+      <p>Google 지도: <a href="${place.url}" target="_blank">링크</a></p>
       <button class="close-button" onclick="closeDetailModal()">닫기</button>
   `;
 
-  // 모달 보이기
+  // 모달 표시
   detailModal.style.display = "block";
 }
 
@@ -195,3 +220,4 @@ function goBackToSearch() {
   window.setActivePlace=setActivePlace;
   window.displayPlaceDetails=displayPlaceDetails;
   window.closeDetailModal=closeDetailModal;
+  window.getPlaceDetails=getPlaceDetails;
