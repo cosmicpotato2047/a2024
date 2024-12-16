@@ -131,14 +131,21 @@ h2 {
 }
 
 .modal-content {
-  position : relative;
+  position: relative; /* 닫기 버튼 위치 기준을 유지하기 위해 필요 */
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 20px; /* 내부 여백 추가 */
+  border-radius: 8px; /* 모서리 둥글게 */
   text-align: center;
-  width: 90%;
-  max-height: 80%;
+  width: auto; /* 폭을 콘텐츠 크기에 맞게 설정 */
+  max-width: 90%; /* 너무 넓어지지 않도록 최대 폭 제한 */
+  min-width: 300px; /* 너무 좁아지지 않도록 최소 폭 제한 */
+  word-wrap: break-word; /* 텍스트가 길어질 경우 줄 바꿈 */
   z-index: 1010;
+}
+
+#mapModal .modal-content {
+  width: 100%; /* 화면 가로를 꽉 채움 */
+  
 }
 
 .close {
