@@ -35,24 +35,26 @@ function closeModal(modalId) {
   document.getElementById(modalId).style.display = 'none';
 }
 
-// 현재 위치 사용
 function useCurrentLocation() {
   navigator.geolocation.getCurrentPosition(position => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
-    // 모달 열기 및 현재 위치 표시
-    openModal("mapModal");
-    document.getElementById("modalContent").innerHTML = `
-      <div id="googleMap" style="width: 100%; height: 300px;"></div>
-      <p>현재 위치: (${latitude.toFixed(6)}, ${longitude.toFixed(6)})</p>
-      <p>여기가 맞습니까?</p>
-      <button onclick="confirmCurrentLocation(${latitude}, ${longitude})">Yes</button>
-      <button onclick="declineCurrentLocation()">No</button>
-    `;
-    initMap(latitude, longitude);
+    // Geocoding으로 주소 가져오기
+    getAddressFromCoordinates(latitude, longitude, address => {
+      openModal("mapModal");
+      document.getElementById("modalContent").innerHTML = `
+        <div id="googleMap" style="width: 100%; height: 300px;"></div>
+        <p>현재 위치: ${address}</p>
+        <p>여기가 맞습니까?</p>
+        <button onclick="confirmCurrentLocation(${latitude}, ${longitude})">Yes</button>
+        <button onclick="declineCurrentLocation()">No</button>
+      `;
+      initMap(latitude, longitude);
+    });
   });
 }
+
 
 function confirmCurrentLocation(lat, lng) {
   closeModal("mapModal");
@@ -96,16 +98,19 @@ function initMap(lat, lng) {
 
 function initSelectableMap() {
   const map = new google.maps.Map(document.getElementById("googleMap"), {
-    center: { lat: 37.7749, lng: -122.4194 }, // San Francisco default
+    center: { lat: 37.7749, lng: -122.4194 }, // 기본 위치
     zoom: 12,
   });
 
   map.addListener("click", e => {
     const lat = e.latLng.lat();
     const lng = e.latLng.lng();
-    document.getElementById("selectedLocation").innerText = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    getAddressFromCoordinates(lat, lng, address => {
+      document.getElementById("selectedLocation").innerText = address;
+    });
   });
 }
+
 
 // 정보 화면 로드
 let currentLocation = {};
@@ -129,6 +134,23 @@ function returnToLocationSetup() {
 }
 
 
+// Geocoding API를 사용해 위도와 경도를 주소로 변환
+function getAddressFromCoordinates(lat, lng, callback) {
+  const apiKey = "AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw"; // Google Maps API 키
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+  
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "OK" && data.results.length > 0) {
+        const address = data.results[0].formatted_address;
+        callback(address); // 주소를 콜백으로 전달
+      } else {
+        callback("주소를 가져올 수 없습니다."); // 오류 처리
+      }
+    })
+    .catch(() => callback("Geocoding 요청 실패"));
+}
 
 
 
