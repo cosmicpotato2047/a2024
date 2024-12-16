@@ -76,6 +76,10 @@ function searchPlaces() {
     });
   }
   
+
+  let map, markers = [];
+let activePlaceIndex = null;
+
   // 검색 결과 화면 업데이트
 function updatePlaceSearchResultScreen(results, conditions) {
     // 화면 전환
@@ -101,53 +105,82 @@ function updatePlaceSearchResultScreen(results, conditions) {
       const placeElement = document.createElement("div");
       placeElement.className = "place-item";
       placeElement.innerHTML = `
-        <h3>${place.name}</h3>
-        <p>주소: ${place.vicinity || "정보 없음"}</p>
-        <p>평점: ${place.rating || "정보 없음"} (${place.user_ratings_total || 0} 리뷰)</p>
+          <h3>${place.name}</h3>
+          <p>주소: ${place.vicinity || "정보 없음"}</p>
+          <p>평점: ${place.rating || "정보 없음"} (${place.user_ratings_total || 0} 리뷰)</p>
       `;
+
+      // 리스트 항목 클릭 이벤트
       placeElement.addEventListener("click", () => {
-        map.setCenter(place.geometry.location);
-        map.setZoom(15);
+          setActivePlace(index, place.geometry.location);
       });
+
       resultsContainer.appendChild(placeElement);
-    });
-  
-  // 지도 표시
-    const mapContainer = document.getElementById("resultMap");
-    let parent = mapContainer.parentElement;
-  while (parent) {
-    console.log("Parent element:", parent);
-    console.log("Parent offsetWidth:", parent.offsetWidth);
-    console.log("Parent offsetHeight:", parent.offsetHeight);
-    parent = parent.parentElement;
-  }
-  ;
-    mapContainer.innerHTML = ""; // 기존 지도 초기화
-    
-    
-    if (currentLocation.lat && currentLocation.lng) {
-      const map = new google.maps.Map(mapContainer, {
-        center: currentLocation,
-        zoom: 13,
-      });
-  
-      results.forEach((place, index) => {
-        const marker = new google.maps.Marker({
+
+      // 지도 마커 생성 및 클릭 이벤트 추가
+      const marker = new google.maps.Marker({
           position: place.geometry.location,
           map,
           label: `${index + 1}`,
-        });
-  
-        marker.addListener("click", () => {
-          map.setCenter(marker.getPosition());
-          map.setZoom(15);
-        });
       });
-    } else {
-      console.error("currentLocation이 비어 있음:", currentLocation);
-      alert("현재 위치를 설정한 후 다시 시도하세요.");
-    }
+
+      marker.addListener("click", () => {
+          setActivePlace(index, place.geometry.location);
+      });
+
+      markers.push(marker);
+  });
+
+  // 지도 초기화
+  const mapContainer = document.getElementById("resultMap");
+  mapContainer.innerHTML = "";
+  map = new google.maps.Map(mapContainer, {
+      center: currentLocation,
+      zoom: 13,
+  });
+
+  // 마커 지도에 추가
+  markers.forEach(marker => marker.setMap(map));
+}
+
+function setActivePlace(index, location) {
+  // 기존 선택 해제
+  if (activePlaceIndex !== null) {
+      document.querySelectorAll(".place-item")[activePlaceIndex].classList.remove("selected");
   }
+
+  // 새로운 선택 설정
+  activePlaceIndex = index;
+  document.querySelectorAll(".place-item")[index].classList.add("selected");
+
+  // 지도 위치 업데이트
+  map.setCenter(location);
+  map.setZoom(15);
+
+  // 선택된 장소의 정보 표시 (필요 시)
+  displayPlaceDetails(index);
+}
+
+function displayPlaceDetails(index) {
+  const placeDetails = document.querySelectorAll(".place-item")[index].innerHTML;
+  const detailModal = document.getElementById("detailModal");
+
+  // 상세 정보를 모달에 삽입
+  detailModal.innerHTML = `
+      ${placeDetails}
+      <button class="close-button" onclick="closeDetailModal()">닫기</button>
+  `;
+
+  // 모달 보이기
+  detailModal.style.display = "block";
+}
+
+function closeDetailModal() {
+  // 모달 숨기기
+  const detailModal = document.getElementById("detailModal");
+  detailModal.style.display = "none";
+}
+
   
 function goBackToSearch() {
     document.getElementById('placeSearchResultScreen').style.display = 'none';
@@ -159,3 +192,6 @@ function goBackToSearch() {
   window.searchPlaces=searchPlaces;
   window.updatePlaceSearchResultScreen=updatePlaceSearchResultScreen;
   window.goBackToSearch=goBackToSearch;
+  window.setActivePlace=setActivePlace;
+  window.displayPlaceDetails=displayPlaceDetails;
+  window.closeDetailModal=closeDetailModal;
