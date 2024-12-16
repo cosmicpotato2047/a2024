@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>어디 갈래?</title>
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzs_JWrd2fjQl388h83v2xDT7UeheB-Sw&libraries=places&callback=initMap" async defer ></script>
 </head>
@@ -31,11 +31,11 @@
     </header>
     <!-- LittleP를 화면 중심에 배치 -->
   <div id="littlep-container">
-    <img id="littlep" src="LITTLEP.png" alt="Little Prince">
+    <img id="littlep" src="assets/LITTLEP.png" alt="Little Prince">
   </div>
   <!-- 지구본을 LittleP 아래로 배치 -->
   <div id="globe-container">
-    <img id="globe" src="GLOBE.png" alt="Globe">
+    <img id="globe" src="assets/GLOBE.png" alt="Globe">
   </div>
   <div class="center-buttons">
     <button onclick="useCurrentLocation()">현재 위치 사용</button>
@@ -71,7 +71,7 @@
   
     <!-- 가운데: 화살표 -->
     <div id="arrowContainer" style="width: 10%; text-align: center; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
-      <img src="arrow.png" alt="화살표" style="width: 900%; height: auto;">
+      <img src="assets/arrow.png" alt="화살표" style="width: 900%; height: auto;">
     </div>
   
     <!-- 오른쪽: 옷차림 추천 -->
@@ -234,6 +234,11 @@
 </div>
 
 
-  <script src="scripts.js"></script>
+  <script src="js/scripts.js"></script>
+  <script src="js/video.js"></script>
+  <script src="js/location.js"></script>
+  <script src="js/details.js"></script>
+  <script src="weather.js"></script>
+  
 </body>
 </html>
