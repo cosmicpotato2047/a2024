@@ -246,6 +246,12 @@ h2 {
   transition: transform 0.2s;
 }
 
+.place-item.selected {
+  background-color: yellow;
+  transform: scale(1.1);
+}
+
+
 .place-item:hover {
   transform: scale(1.05);
   background-color: #f9f9f9;
@@ -370,5 +376,37 @@ h2 {
   background-color: #0056b3;
 }
 
+
+#detailModal {
+  display: none; /* 초기에는 숨김 */
+  position: fixed;
+  top: 0; /* 화면 최상단 */
+  left: 50%; /* 가로 중앙 */
+  transform: translate(-50%, 0); /* 가로 중앙 정렬 */
+  background: white; /* 흰색 배경 */
+  padding: 20px; /* 여백 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 */
+  z-index: 1001; /* 다른 요소 위에 위치 */
+  max-width: 80%; /* 최대 폭 제한 */
+  word-wrap: break-word; /* 텍스트가 길 경우 줄 바꿈 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+#detailModal .close-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-block;
+  transition: background-color 0.2s;
+}
+
+#detailModal .close-button:hover {
+  background-color: #e0e0e0;
+}
 
   
