@@ -171,4 +171,4 @@ function searchLiveStreams() {
 
 **이슈 등록** 또는 **PR을 통해 기여**해 주세요! 🎉
 
-🔗 **GitHub Repository:** [your-repository-link](https://github.com/cosmicpotato2047/where-to-go)
+🔗 **GitHub Repository:** [where-to-go](https://github.com/cosmicpotato2047/where-to-go)
