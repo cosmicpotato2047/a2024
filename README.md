@@ -3,8 +3,9 @@
 **어디 갈래?**는 사용자의 현재 위치 또는 선택한 도시를 기반으로 **맞춤형 여행 정보**를 제공하는 웹 애플리케이션입니다.  
 실시간 날씨, 주변 명소 검색, 유튜브 라이브 스트리밍 등을 활용하여 보다 스마트한 여행을 돕습니다.  
 
-![Project Preview](assets/screenshot.png)  
-_(프로젝트 주요 화면을 캡처하여 추가하세요.)_  
+![Project Preview_1](assets/preview_1.png)
+![Project Preview_2](assets/preview_2.png)  
+
 
 ---
 
